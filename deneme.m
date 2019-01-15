@@ -37,7 +37,7 @@ R_deltas_noised = euler_to_rot_mat(delta_theta_noised);
 [p_noised, R_matrices_noised] = random_pose(N, delta_p_noised, R_deltas_noised);
 
 delta_p_mat = cell2mat(delta_p_cell);
-cost_org = cost_calculator(p, R_matrices, delta_p_mat, R_deltas)
+cost_org = cost_calculator(p, R_matrices, delta_p_mat, R_delta_cell)
 % cost_noised = cost_calculator(p_noised, R_matrices_noised, delta_p_noised, R_deltas_noised)
 
 % figure;

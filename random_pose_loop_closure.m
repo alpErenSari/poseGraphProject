@@ -16,8 +16,8 @@ function [p, R_matrices, delta_p_cell, R_delta_cell] = random_pose_loop_closure(
 
     for i = 1:N
     %     R_i = R(1:2, 2*i-1:2*i);
-%         loop_prob = rand(1);
-        loop_prob = 1;
+        loop_prob = rand(1);
+%         loop_prob = 1;
         
         delta_p = pmax*rand(2,1);
         delta_theta = 2*pi*rand(1) - pi;
@@ -29,10 +29,12 @@ function [p, R_matrices, delta_p_cell, R_delta_cell] = random_pose_loop_closure(
             c = randi(i-1);
             p{i+1} = p{i-c};
             delta_p = R_i'*(p{i+1} - p{i});
+%             disp('First part');
         else
             p{i+1} = p{i} + R_i*delta_p;
         end
         delta_p_cell{i} = delta_p;
         R_delta_cell{i} = R_delta{1};
+        
     end
 end
