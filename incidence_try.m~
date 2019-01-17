@@ -51,15 +51,13 @@ R_delta_cell_noise = cell(1,M);
 
 for k = 1:M
     i = rows(k); j = cols(k);
-    delta_p_cell_noise{k} = R_cells{i}'*(p(:,j) - p(:,i)) + 0.1*randn(2,1);
-    R_noise = euler_to_rot_mat(0.1*(2*pi*randn(1) - pi));
-    R_delta_cell_noise{k} = R_cells{i}'*R_cells{j}*R_noise{1};
+    delta_p_cell_noise{k} = R_cells{i}'*(p(:,j) - p(:,i)) + randn(2,1);
+    R_noise = euler_to_rot_mat
+    R_delta_cell_noise{k} = R_cells{i}'*R_cells{j}*euler_to_rot_mat;
 end
 
 
 cost = cost_calculator_incidence(p, R_cells, delta_p_cell, R_delta_cell, A_inc)
-cost_noise = cost_calculator_incidence(p, R_cells, delta_p_cell_noise, R_delta_cell_noise, A_inc)
-
 
 G = digraph(A);
 
