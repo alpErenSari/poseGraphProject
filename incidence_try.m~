@@ -11,7 +11,7 @@ for i = 1:N
     for j = 1:N
         prob = rand(1);
         if(prob < 0.1) && (i ~= j) && (A(i,j) == 0)
-            A(i,j) = 1;
+%             A(i,j) = 1;
 %             A(j,i) = -1;
         end
     end
@@ -51,13 +51,27 @@ R_delta_cell_noise = cell(1,M);
 
 for k = 1:M
     i = rows(k); j = cols(k);
-    delta_p_cell_noise{k} = R_cells{i}'*(p(:,j) - p(:,i)) + randn(2,1);
-    R_noise = euler_to_rot_mat
-    R_delta_cell_noise{k} = R_cells{i}'*R_cells{j}*euler_to_rot_mat;
+    delta_p_cell_noise{k} = R_cells{i}'*(p(:,j) - p(:,i)) + 0.1*randn(2,1);
+    R_noise = euler_to_rot_mat(0.1*(2*pi*randn(1) - pi));
+    R_delta_cell_noise{k} = R_cells{i}'*R_cells{j}*R_noise{1};
 end
 
 
-cost = cost_calculator_incidence(p, R_cells, delta_p_cell, R_delta_cell, A_inc)
+% cost = cost_calculator_incidence(p, R_cells, delta_p_cell, R_delta_cell, A_inc)
+% cost_noise = cost_calculator_incidence(p, R_cells, delta_p_cell_noise, R_delta_cell_noise, A_inc)
+
+[x_vec, W] = cost_calculator_incidence_complex(p, R_cells, delta_p_cell, R_delta_cell, A_inc);
+% cost = real(cost)
+% cost_noise = cost_calculator_incidence_complex(p, R_cells, delta_p_cell_noise, R_delta_cell_noise, A_inc)
+% cost_noise = real(cost_noise)
+
+[m,n] = size(A_inc);
+lambda_ = ones(n, 1);
+cost = @(x, lambda) real( x'*W*x + lambda'*(1 - conj(x(n:end)).*x(n:end)));
+cost_2 = @(x) real( x'*W*x + lambda'*(1 - conj(x(n:end)).*x(n:end)))
+cost(x_vec, lambda_);
+
+
 
 G = digraph(A);
 

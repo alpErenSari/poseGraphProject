@@ -1,4 +1,4 @@
-function cost = cost_calculator_incidence_complex(p, R, p_delta, R_deltas, A_inc)
+function [x_vec_anc, W_anc] = cost_calculator_incidence_complex(p, R, p_delta, R_deltas, A_inc)
     [m,n] = size(A_inc);
     r_vec = rot_mat_to_vec(R);
     delta_p_mat = delta_p_cell_to_p_mat(p_delta);
@@ -27,7 +27,7 @@ function cost = cost_calculator_incidence_complex(p, R, p_delta, R_deltas, A_inc
     end
     
     % stack p and r together
-    x_vec = [p_vec'; r_vec'];
+    x_vec = [transpose(p_vec); transpose(r_vec)];
     % reduce the x_vec 
     
     % construct the elements of W

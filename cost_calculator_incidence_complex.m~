@@ -6,9 +6,9 @@ function cost = cost_calculator_incidence_complex(p, R, p_delta, R_deltas, A_inc
     D = zeros(m, n);
     for k = 1:m
         i = find(A_inc(k,:) == -1);
-        theta_ = atan(delta_p_mat{k}(2,1) / delta_p_mat{k}(1,1));
-        alpha_ = sqrt(det(delta_p_mat{k}));
-        D(k, i) = -alpha_.*exp(j*theta_);
+%         theta_ = atan(delta_p_mat{k}(2,1) / delta_p_mat{k}(1,1));
+%         alpha_ = norm(delta_p_mat{k}(:,1));
+        D(k, i) = -complex(delta_p_mat{k}(1,1), delta_p_mat{k}(2,1));
     end
     % create p vector from all p's
     p_vec = complex(p(1,:), p(2,:));
@@ -21,23 +21,21 @@ function cost = cost_calculator_incidence_complex(p, R, p_delta, R_deltas, A_inc
     for k = 1:m
         i = find(A_inc(k,:) == -1);
         j = find(A_inc(k,:) == 1);
-        theta_ = atan(R_deltas{k}(2,1) / R_deltas{k}(1,1));
-        U(k, i) = -1*exp(j*theta_);
+%         theta_ = atan(R_deltas{k}(2,1) / R_deltas{k}(1,1));
+        U(k, i) = -complex(R_deltas{k}(1,1), R_deltas{k}(2,1));
         U(k, j) = 1;
     end
     
     % stack p and r together
-    x_vec = [p_vec; r_vec];
+    x_vec = [transpose(p_vec); transpose(r_vec)];
     % reduce the x_vec 
     
     % construct the elements of W
     L = A_inc'*A_inc;
-    L_bar = kron(L, eye(2));
     Q = D'*D + U'*U;
-    W = [L_bar A_bar'*D; D'*A_bar Q];
     
     % construct the W for anchored A
-    x_vec_anc = x_vec(3:end);
+    x_vec_anc = x_vec(2:end);
     A_inc_anc = A_inc(:, 2:end);
     L_anc = A_inc_anc'*A_inc_anc;
     S_anc = A_inc_anc'*D;
@@ -47,5 +45,6 @@ function cost = cost_calculator_incidence_complex(p, R, p_delta, R_deltas, A_inc
 %     cost = norm(A_bar*p_vec + D*r_vec).^2 + norm(U*r_vec).^2;
 %     cost = x_vec'*W*x_vec;
     cost = x_vec_anc'*W_anc*x_vec_anc;
+%     cost = 0;
 
 end

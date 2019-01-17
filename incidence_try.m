@@ -60,8 +60,22 @@ end
 % cost = cost_calculator_incidence(p, R_cells, delta_p_cell, R_delta_cell, A_inc)
 % cost_noise = cost_calculator_incidence(p, R_cells, delta_p_cell_noise, R_delta_cell_noise, A_inc)
 
-cost = cost_calculator_incidence_complex(p, R_cells, delta_p_cell, R_delta_cell, A_inc)
-cost_noise = cost_calculator_incidence_complex(p, R_cells, delta_p_cell_noise, R_delta_cell_noise, A_inc)
+[x_vec, W] = cost_calculator_incidence_complex(p, R_cells, delta_p_cell, R_delta_cell, A_inc);
+% cost = real(cost)
+% cost_noise = cost_calculator_incidence_complex(p, R_cells, delta_p_cell_noise, R_delta_cell_noise, A_inc)
+% cost_noise = real(cost_noise)
+
+[m,n] = size(A_inc);
+lambda_ = ones(n, 1);
+cost = @(x, lambda) real( x'*W*x + lambda'*(1 - conj(x(n:end)).*x(n:end)));
+cost_2 = @(x) real( x'*W*x );
+cost(x_vec, lambda_);
+
+x0 = complex(rand(2*n-1, 1), rand(2*n-1,1));
+x_opt = fminunc(cost_2, x0)
+
+
+
 
 G = digraph(A);
 
