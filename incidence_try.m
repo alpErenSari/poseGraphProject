@@ -11,7 +11,7 @@ for i = 1:N
     for j = 1:N
         prob = rand(1);
         if(prob < 0.1) && (i ~= j) && (A(i,j) == 0)
-            A(i,j) = 1;
+%             A(i,j) = 1;
 %             A(j,i) = -1;
         end
     end
@@ -57,9 +57,11 @@ for k = 1:M
 end
 
 
-cost = cost_calculator_incidence(p, R_cells, delta_p_cell, R_delta_cell, A_inc)
-cost_noise = cost_calculator_incidence(p, R_cells, delta_p_cell_noise, R_delta_cell_noise, A_inc)
+% cost = cost_calculator_incidence(p, R_cells, delta_p_cell, R_delta_cell, A_inc)
+% cost_noise = cost_calculator_incidence(p, R_cells, delta_p_cell_noise, R_delta_cell_noise, A_inc)
 
+cost = cost_calculator_incidence_complex(p, R_cells, delta_p_cell, R_delta_cell, A_inc)
+cost_noise = cost_calculator_incidence_complex(p, R_cells, delta_p_cell_noise, R_delta_cell_noise, A_inc)
 
 G = digraph(A);
 
