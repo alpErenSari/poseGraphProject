@@ -67,12 +67,41 @@ end
 
 [m,n] = size(A_inc);
 lambda_ = ones(n, 1);
+W_l = @(lambda) W - diag([zeros(n-1,1); lambda]);
 cost = @(x, lambda) real( x'*W*x + lambda'*(1 - conj(x(n:end)).*x(n:end)));
-cost_2 = @(x) real( x'*W*x );
+cost_2 = @(x) real( x'*W*x + sum(1 - conj(x(n:end)).*x(n:end)).^2);
 cost(x_vec, lambda_);
 
-x0 = complex(rand(2*n-1, 1), rand(2*n-1,1));
-x_opt = fminunc(cost_2, x0)
+W_lambda =  W - [zeros(n-1, 2*n-1); [zeros(n,n-1) diag(lambda_)]];
+% cost_dual = @(x) real(x'*W_lambda*x + sum(lambda_));
+cost_dual = @(x) real( x'*W*x + lambda_'*(1 - conj(x(n:end)).*x(n:end)).^2 );
+
+% cost_dual_l = @(lambda) real(-sum(lambda) - 100*sum(min(eig(W_l(lambda)), 0))); 
+% lamb_sol = fminunc(cost_dual_l, lambda_);
+% W_lamb = W_l(lamb_sol);
+% [U,S,V] = svd(W_lamb);
+% S(abs(S) < 1e-4) = 0;
+% W_lamb_p = U*S*V';
+% x_lamb = null(W_lamb_p);
+% for i = n:2*n-1
+%     x_lamb(i) = x_lamb(i)/norm(x_lamb(i));
+% end
+% display(x_lamb);
+
+% find lambda with cvx sdp
+cvx_begin
+    variable lambda(n)
+    maximize( sum(lambda) )
+    W_l(lambda) == semidefinite( 2*n-1 )
+    norm(lambda) <= 100
+cvx_end
+
+
+% x0 = complex(rand(2*n-1, 1), rand(2*n-1,1));
+% x_opt = fminunc(cost_dual, x0);
+% display(cost_dual(x0));
+% display(cost_dual(x_opt));
+
 
 
 

@@ -14,8 +14,6 @@ function [x_vec_anc, W_anc] = cost_calculator_incidence_complex(p, R, p_delta, R
     p_vec = complex(p(1,:), p(2,:));
     r_vec = cell2mat(r_vec);
     r_vec = complex(r_vec(1,:), r_vec(2,:));
-    % create A_bar with size 2mx2n
-    A_bar = kron(A_inc, eye(2));
     
     U = zeros(m, n);
     for k = 1:m
