@@ -127,7 +127,6 @@ function run_Callback(hObject, eventdata, handles)
 opt.N = round(str2double(get(handles.N, 'string')));
 opt.M = str2double(get(handles.M, 'string'));
 i_max = str2double(get(handles.it_max, 'string'));
-opt.initial = get(handles.initial_y, 'string');
 opt.method = get(get(handles.uibuttongroup2, 'SelectedObject'), 'Tag');
 opt.solver = get(get(handles.uibuttongroup1, 'SelectedObject'), 'Tag');
 opt.search = get(get(handles.uibuttongroup4, 'SelectedObject'), 'Tag');
@@ -163,16 +162,16 @@ while(1)
     else
         answer_it = inputdlg({'Please enter the new maximum iteration'});
         i_max = round(str2num(answer_it{1}));
-        answer_in = questdlg('Would you like to use select a new inital function?', ...
-        'Make Your Choice', ...
-        'Yes','No, use the last point', 'No, use the last point');
-        if(strcmp(answer_in, 'Yes'))
-            answer_initial = inputdlg({'Please enter the new inital function'});
-            opt.loop = 0;
-            opt.initial = sprintf(answer_initial{1});
-        else
-            opt.initial = x_sol;
-        end
+%         answer_in = questdlg('Would you like to use select a new inital function?', ...
+%         'Make Your Choice', ...
+%         'Yes','No, use the last point', 'No, use the last point');
+%         if(strcmp(answer_in, 'Yes'))
+%             answer_initial = inputdlg({'Please enter the new inital function'});
+%             opt.loop = 0;
+%             opt.initial = sprintf(answer_initial{1});
+%         else
+%             opt.initial = x_sol;
+%         end
 
     end
 end
