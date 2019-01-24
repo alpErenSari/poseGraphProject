@@ -89,18 +89,18 @@ cost_dual = @(x) real( x'*W*x + lambda_'*(1 - conj(x(n:end)).*x(n:end)).^2 );
 % display(x_lamb);
 
 % find lambda with cvx sdp
-cvx_begin
-    variable lambda(n)
-    maximize( sum(lambda) )
-    W_l(lambda) == semidefinite( 2*n-1 )
-    norm(lambda) <= 100
-cvx_end
+% cvx_begin
+%     variable lambda(n)
+%     maximize( sum(lambda) )
+%     W_l(lambda) == semidefinite( 2*n-1 )
+%     norm(lambda) <= 100
+% cvx_end
 
 
-% x0 = complex(rand(2*n-1, 1), rand(2*n-1,1));
-% x_opt = fminunc(cost_dual, x0);
-% display(cost_dual(x0));
-% display(cost_dual(x_opt));
+x0 = complex(rand(2*n-1, 1), rand(2*n-1,1));
+x_opt = fminunc(cost_dual, x0);
+display(cost_dual(x0));
+display(cost_dual(x_opt));
 
 
 
